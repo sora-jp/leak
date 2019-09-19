@@ -1,4 +1,5 @@
-﻿using Leak.Common;
+﻿using System.IO;
+using Leak.Common;
 
 namespace Leak.Data.Store
 {
@@ -21,7 +22,7 @@ namespace Leak.Data.Store
             this.hooks = hooks;
             this.configuration = configuration;
 
-            bitfile = new BitfileService(parameters.Hash, parameters.Destination + ".bitfield");
+            bitfile = new BitfileService(parameters.Hash, Path.Combine(parameters.MetaDestination, $"{parameters.Hash}.bitfield"));
             queue = new RepositoryTaskQueue(this);
         }
 

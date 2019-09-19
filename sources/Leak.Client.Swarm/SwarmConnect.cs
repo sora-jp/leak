@@ -107,22 +107,22 @@ namespace Leak.Client.Swarm
             }
         }
 
-        public void Download(string destination)
+        public void Download(string destination, string metaDest)
         {
-            StartMetaStore(destination);
+            StartMetaStore(metaDest);
             StartMetaGet();
 
-            StartDataStore(destination);
+            StartDataStore(destination, metaDest);
             StartDataGet();
         }
 
-        public void Seed(string destination)
+        public void Seed(string destination, string metaDest)
         {
-            StartMetaStore(destination);
+            StartMetaStore(metaDest);
             StartMetaGet();
             StartMetaShare();
 
-            StartDataStore(destination);
+            StartDataStore(destination, metaDest);
             StartDataGet();
             StartDataShare();
 
@@ -147,7 +147,9 @@ namespace Leak.Client.Swarm
         {
             NetworkPoolHooks hooks = new NetworkPoolHooks
             {
-                OnConnectionTerminated = OnConnectionTerminated
+                OnConnectionTerminated = OnConnectionTerminated,
+                OnConnectionReceived = Settings.NetworkHooks.OnConnectionReceived,
+                OnConnectionSent = Settings.NetworkHooks.OnConnectionSent,
             };
 
             Network =
@@ -373,7 +375,7 @@ namespace Leak.Client.Swarm
             MetaShare.Start();
         }
 
-        private void StartDataStore(string destination)
+        private void StartDataStore(string destination, string metaDestination)
         {
             RepositoryHooks hooks = new RepositoryHooks
             {
@@ -388,7 +390,8 @@ namespace Leak.Client.Swarm
             DataStore =
                 new RepositoryBuilder()
                     .WithHash(Hash)
-                    .WithDestination(Path.Combine(destination, Hash.ToString()))
+                    .WithDestination(destination)
+                    .WithMetaDestination(metaDestination)
                     .WithPipeline(Pipeline)
                     .WithFiles(Files)
                     .WithMemory(Memory.AsDataStore())
@@ -400,9 +403,7 @@ namespace Leak.Client.Swarm
 
         private void StartDataGet()
         {
-            DataGetHooks hooks = new DataGetHooks
-            {
-            };
+            DataGetHooks hooks = new DataGetHooks();
 
             DataGet =
                 new DataGetBuilder()

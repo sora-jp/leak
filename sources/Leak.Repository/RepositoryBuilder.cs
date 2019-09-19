@@ -26,6 +26,13 @@ namespace Leak.Data.Store
         public RepositoryBuilder WithDestination(string destination)
         {
             parameters.Destination = destination;
+            if (string.IsNullOrEmpty(parameters.MetaDestination)) parameters.MetaDestination = destination;
+            return this;
+        }
+
+        public RepositoryBuilder WithMetaDestination(string metaDestination)
+        {
+            parameters.MetaDestination = metaDestination;
             return this;
         }
 

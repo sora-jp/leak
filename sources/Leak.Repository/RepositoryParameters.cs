@@ -7,5 +7,6 @@ namespace Leak.Data.Store
         public FileHash Hash;
 
         public string Destination;
+        public string MetaDestination;
     }
 }

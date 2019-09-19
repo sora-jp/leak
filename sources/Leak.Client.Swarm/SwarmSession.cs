@@ -17,14 +17,14 @@ namespace Leak.Client.Swarm
             get { return inner.Hash; }
         }
 
-        public void Download(string destination)
+        public void Download(string destination, string metaDest)
         {
-            inner.Download(destination);
+            inner.Download(destination, metaDest);
         }
 
-        public void Seed(string destination)
+        public void Seed(string destination, string metaDest)
         {
-            inner.Seed(destination);
+            inner.Seed(destination, metaDest);
         }
 
         public Task<Notification> NextAsync()
