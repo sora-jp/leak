@@ -38,11 +38,11 @@ namespace Leak
                     switch (options.Command)
                     {
                         case "download":
-                            session.Download(options.Destination, options.Destination);
+                            session.Download(options.Destination);
                             break;
 
                         case "seed":
-                            session.Seed(options.Destination, options.Destination);
+                            session.Seed(options.Destination);
                             break;
                     }
 

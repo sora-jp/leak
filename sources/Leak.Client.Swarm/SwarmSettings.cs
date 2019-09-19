@@ -1,6 +1,4 @@
-﻿using Leak.Networking;
-
-namespace Leak.Client.Swarm
+﻿namespace Leak.Client.Swarm
 {
     public class SwarmSettings
     {
@@ -12,8 +10,6 @@ namespace Leak.Client.Swarm
             Strategy = "rarest-first";
             Metadata = true;
             Exchange = true;
-
-            NetworkHooks = new NetworkPoolHooks();
         }
 
         public bool Listener { get; set; }
@@ -25,7 +21,5 @@ namespace Leak.Client.Swarm
         public string Strategy { get; set; }
         public bool Metadata { get; set; }
         public bool Exchange { get; set; }
-
-        public NetworkPoolHooks NetworkHooks { get; set; }
     }
 }
