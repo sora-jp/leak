@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Leak.Common;
+using Leak.Networking;
 using Leak.Networking.Core;
 
 namespace Leak.Client.Swarm
