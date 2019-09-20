@@ -75,6 +75,8 @@ namespace Leak.Client.Swarm
         public DataGetService DataGet { get; set; }
         public DataShareService DataShare { get; set; }
 
+        int m_size;
+
         public void Start()
         {
             StartMemory();
@@ -107,24 +109,29 @@ namespace Leak.Client.Swarm
             }
         }
 
-        public void Download(string destination, string metaDest)
+        public void PrefetchMeta(string metaDest)
         {
             StartMetaStore(metaDest);
             StartMetaGet();
+        }
 
+        public void Download(string destination, string metaDest)
+        {
             StartDataStore(destination, metaDest);
             StartDataGet();
+
+            if (Metainfo != null) HandleMetafileVerified(new MetafileVerified { Hash = Hash, Metainfo = Metainfo, Size = m_size });
         }
 
         public void Seed(string destination, string metaDest)
         {
-            StartMetaStore(metaDest);
-            StartMetaGet();
             StartMetaShare();
 
             StartDataStore(destination, metaDest);
             StartDataGet();
             StartDataShare();
+
+            if (Metainfo != null) HandleMetafileVerified(new MetafileVerified { Hash = Hash, Metainfo = Metainfo, Size = m_size });
 
             Coordinator.Configuration.AnnounceBitfield = true;
         }
@@ -584,8 +591,14 @@ namespace Leak.Client.Swarm
         private void OnMetafileVerified(MetafileVerified data)
         {
             Metainfo = data.Metainfo;
+            m_size = data.Size;
             Notifications.Enqueue(new MetafileCompletedNotification(Metainfo));
 
+            if (DataStore != null) HandleMetafileVerified(data);
+        }
+
+        private void HandleMetafileVerified(MetafileVerified data)
+        {
             Coordinator?.Handle(data);
             DataStore?.Handle(data);
             DataMap?.Handle(data);

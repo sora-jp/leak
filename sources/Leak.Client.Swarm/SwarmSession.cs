@@ -27,6 +27,11 @@ namespace Leak.Client.Swarm
             inner.Seed(destination, metaDest);
         }
 
+        public void PrefetchMeta(string metaDest)
+        {
+            inner.PrefetchMeta(metaDest);
+        }
+
         public Task<Notification> NextAsync()
         {
             return inner.Notifications.NextAsync();
